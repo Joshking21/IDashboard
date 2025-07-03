@@ -6,9 +6,10 @@ import { motion } from "framer-motion"
 import { Field, Form, Formik } from "formik"
 import { loginSchema} from "@schemas/loginSchema"
 import RoundedInput from "../../../components/RoundedInput"
-import { Box, Button, Checkbox, FormControlLabel } from "@mui/material"
+import { Box, Button, Checkbox, CircularProgress, FormControlLabel } from "@mui/material"
 import useAuthStore from "@/stores/useAuth"
 import { useNavigate } from "react-router-dom"
+import useLogin from "@/hooks/useLogin"
 
 const formInputs = [
     {
@@ -26,11 +27,17 @@ const formInputs = [
 export default function Login() {
     const setUser = useAuthStore((state)=> state.setUser)
     const navigate = useNavigate()
+    const { mutateAsync: sendLogin } = useLogin()
     
     function handleLogin(values){
-        console.log(`login values: ${JSON.stringify(values, null, 2)}`)
-        setUser(values)
-        navigate("/dashboard")
+        sendLogin(values).then((data)=> {
+            console.log(data)
+            localStorage.setItem("accessToken", data.data.accessToken)
+            setUser(data.data.user)
+            navigate("/dashboard")
+        }).catch(err=>{
+            alert(err.message)
+        })
     }
 
     const handleSubmit = (values, actions) => {
@@ -112,6 +119,9 @@ export default function Login() {
                                         variant="contained"
                                         className={styles.loginButton}
                                         disabled={!values.email || !values.password || !isValid || isSubmitting }
+                                        startIcon={
+                                            isSubmitting && <CircularProgress size={"20px"} sx={{color: "#fff"}} />
+                                        }
                                     >
                                         Login
                                     </Button>

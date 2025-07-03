@@ -1,0 +1,43 @@
+.container{
+    position: relative;
+    width: 100%;
+    padding: 2rem;
+    border-radius: 20px;
+    background: linear-gradient(90deg, #2AC769, #2C9455);
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.userItem{
+    position: relative;
+    display: flex;
+    gap: 0.7rem;
+}
+
+.svgCont{
+    height: 40px;
+    width: 40px;
+    position: relative;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    display: grid;
+    place-items: center;
+}
+
+.textCont{
+    position: relative;
+}
+
+.textCont p{
+    color: #fff;
+}
+
+.textCont p:nth-of-type(1){
+    font-size: 14px;
+}
+.textCont p:nth-of-type(2){
+    font-size: 25px;
+}

@@ -3,4 +3,38 @@
     min-height: 200dvh;
     flex: 1;
     width: 100%;
+    padding: 20px 2% 20px 1.5rem;
+}
+
+.header{
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.nameCont{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.name{
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--black-600);
+}
+
+.subcaption{
+    font-size: 12px;
+    color: var(--white-500);
+    font-weight: 400;
+}
+
+.img{
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: contain;
 }
