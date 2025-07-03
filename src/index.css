@@ -2,6 +2,7 @@
   color-scheme: light !important; /* Force light mode */
 
   /* colors */
+  --green-100: #bbf7da;
   --green-300: #3EF49C;
   --green-500: #1AB168;
   --white-200: #DADADA;

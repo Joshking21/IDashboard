@@ -1,0 +1,6 @@
+.container{
+    position: relative;
+    min-height: 200dvh;
+    flex: 1;
+    width: 100%;
+}

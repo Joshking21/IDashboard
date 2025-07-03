@@ -7,6 +7,8 @@ import { Field, Form, Formik } from "formik"
 import { loginSchema} from "@schemas/loginSchema"
 import RoundedInput from "../../../components/RoundedInput"
 import { Box, Button, Checkbox, FormControlLabel } from "@mui/material"
+import useAuthStore from "@/stores/useAuth"
+import { useNavigate } from "react-router-dom"
 
 const formInputs = [
     {
@@ -22,9 +24,18 @@ const formInputs = [
 ]
 
 export default function Login() {
+    const setUser = useAuthStore((state)=> state.setUser)
+    const navigate = useNavigate()
     
     function handleLogin(values){
-        console.log(`login values: ${values}`)
+        console.log(`login values: ${JSON.stringify(values, null, 2)}`)
+        setUser(values)
+        navigate("/dashboard")
+    }
+
+    const handleSubmit = (values, actions) => {
+        handleLogin(values)
+        actions.setSubmitting(false)
     }
 
     function handleForgotPassword(){}
@@ -50,12 +61,13 @@ export default function Login() {
                                 password: ""
                             }}
                             validationSchema={loginSchema}
-                            onSubmit={(values)=> handleLogin(values)}
+                            onSubmit={handleSubmit}
                         >
                             {({values, touched, errors, handleChange, handleBlur, handleSubmit, isValid, isSubmitting}) => (
                                 <Form onSubmit={handleSubmit} className={styles.mainForm}>
                                     {formInputs && formInputs.map((value, index)=>(
                                         <RoundedInput
+                                            key={index}
                                             name={value.name}
                                             label={value.label}
                                             placeholder={value.placeholder}
@@ -69,12 +81,14 @@ export default function Login() {
 
                                     <Box className={styles.rememberContainer}>
                                         <Field name="rememberMe">
-                                            {({ field }) => (
+                                            {({ field, form }) => (
                                             <FormControlLabel
                                                 control={
                                                 <Checkbox
-                                                    {...field}
-                                                    checked={field.value}
+                                                    checked={field.value || false}
+                                                    onChange={(e) =>
+                                                        form.setFieldValue(field.name, e.target.checked)
+                                                    }
                                                     color="primary"
                                                     className={styles.checkbox}
                                                 />
@@ -94,6 +108,7 @@ export default function Login() {
                                     </Box>
 
                                     <Button
+                                        type="submit"
                                         variant="contained"
                                         className={styles.loginButton}
                                         disabled={!values.email || !values.password || !isValid || isSubmitting }

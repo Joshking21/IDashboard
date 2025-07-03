@@ -1,4 +1,8 @@
-import { TextField, Typography } from "@mui/material"
+import { IconButton, InputAdornment, TextField, Typography } from "@mui/material"
+import VisibilityIcon from '@mui/icons-material/VisibilityOutlined'
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOffOutlined'
+import { useState } from "react"
+import styles from "./styles.module.css"
 
 export default function RoundedInput({
     name, 
@@ -11,6 +15,11 @@ export default function RoundedInput({
     errors,
     disabled,
 }) {
+    const [showPassword, setShowPassword] = useState(false)
+
+    function handleTogglePasswordVisibility(){
+        setShowPassword(!showPassword)
+    }
     
     return (
         <>
@@ -21,6 +30,7 @@ export default function RoundedInput({
             fullWidth
             name={name}
             variant="outlined"
+            type={name==="password" && !showPassword ? "password" : "text"}
             placeholder={placeholder}
             value={values[name]}
             onChange={handleChange}
@@ -28,6 +38,21 @@ export default function RoundedInput({
             disabled={disabled}
             error={touched[name] && Boolean(errors[name])}
             helperText={touched[name] && errors[name]}
+            slotProps={ name==="password" && {
+                input: {
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <IconButton
+                                onClick={handleTogglePasswordVisibility}
+                                edge="end"
+                                className={styles.visibilityIcon}
+                            >
+                                {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                            </IconButton>
+                        </InputAdornment>
+                    )
+                }
+            }}
             sx={{
                 '& .MuiOutlinedInput-root': {
                 borderRadius: '50px',

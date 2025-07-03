@@ -1,0 +1,9 @@
+.logoutBtn{
+    color: var(--white-500) !important;
+    font-size: 14px !important;
+    font-weight: 600;
+}
+
+.btnActive{
+    color: #EB5757 !important;
+}
