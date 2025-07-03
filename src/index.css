@@ -1,0 +1,52 @@
+:root{
+  color-scheme: light !important; /* Force light mode */
+
+  /* colors */
+  --green-300: #3EF49C;
+  --green-500: #1AB168;
+  --white-200: #DADADA;
+  --white-300: #BDBDBD;
+  --white-400: #828282;
+  --white-500: #888888;
+  --white-900: #ffffff;
+  --black-300: #4A4A4A;
+  --black-400: #2D2B2E;
+  --black-600: #2D2D2D;
+
+  /* size */
+  --text-xsm: "12px";
+  --text-sm: "10px";
+  --text-xmd: "16px";
+  --text-md: "18px";
+
+  /* breaking point */
+  --sm-screen: 340px;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("./assets/fonts/Poppins-regular.ttf");
+}
+
+:root, html, body{
+  background: #fff !important;
+  -webkit-filter: none !important; /* Prevent WebKit dark mode */
+  filter: none !important;
+  forced-color-adjust: none !important;
+}
+
+img, svg, video {
+  filter: none !important;
+  background-color: transparent !important;
+}
+
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+  img, video {
+    filter: none !important; /* Prevents media inversion */
+  }
+}

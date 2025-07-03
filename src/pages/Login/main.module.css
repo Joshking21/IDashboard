@@ -1,0 +1,103 @@
+.container{
+    position: relative;
+    width: 100%;
+    height: 100dvh;
+    display: flex;
+    flex-direction: row;
+    overflow-y: hidden;
+}
+
+.container section{
+    position: relative;
+    flex: 1;
+    width: 100%;
+    height: 100%;
+}
+
+.section1{
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+}
+
+.section2{
+    background: var(--green-500);
+    display: grid;
+    place-items: center;
+}
+
+.section2 > img{
+    position: relative;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.caption{
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--black-600);
+}
+
+.subheading{
+    font-size: 14px;
+    color: var(--black-600);
+}
+
+.form{
+    position: relative;
+    padding-top: 2rem;
+    width: 100%;
+}
+
+.rememberContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.checkbox {
+  padding: 4px !important;
+}
+
+.rememberLabel {
+  margin-right: 0;
+  color: var(--black-300);
+}
+
+.rememberLabel span{
+    font-size: 12px !important;
+}
+
+.forgotPasswordButton {
+  text-transform: none !important;
+  padding: 0;
+  font-weight: normal;
+  min-width: auto;
+  font-size: 12px !important;
+}
+
+.mainForm{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.loginButton{
+    color: white !important;
+    border-radius: 50px !important;
+    padding: 7px !important;
+    font-weight: 500 !important;
+    text-transform: none !important;
+    font-size: 16px !important;
+    margin-top: 16px;
+}
