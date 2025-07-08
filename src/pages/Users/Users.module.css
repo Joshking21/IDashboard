@@ -1,0 +1,43 @@
+.container{
+    position: relative;
+    border: 0.5px solid var(--white-200);
+    width: 100%;
+    margin: 20px 2% 20px 1rem;
+    padding: 1rem;
+    border-radius: 20px;
+}
+
+.userCount{
+    font-size: 20px;
+    color: #515151;
+    display: flex;
+    flex-direction: row;
+    gap: 0.4rem;
+    align-items: center;
+    font-weight: 400;
+}
+
+.userCount span{
+    display: flex;
+    flex-direction: row;
+    gap: 0.1rem;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--green-500);
+}
+
+.userCount span div{
+    position: relative;
+    height: 3px;
+    width: 3px;
+    border-radius: 50%;
+    background: var(--green-500);
+}
+
+.searchWrapper{
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
