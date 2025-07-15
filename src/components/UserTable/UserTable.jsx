@@ -27,7 +27,7 @@ const UserTable = ({userData}) => {
         <thead>
           <tr className={styles.headerRow}>
             <th className={styles.headerCell}>User Name</th>
-            <th className={styles.headerCell}>Phone Number</th>
+            <th className={styles.headerCell}>Email</th>
             <th className={styles.headerCell}>Location</th>
             <th className={styles.headerCell}></th>
           </tr>
@@ -49,7 +49,7 @@ const UserTable = ({userData}) => {
                 </div>
               </td>
               <td className={styles.cell}>
-                <span className={styles.phoneNumber}>{user?.phone_number}</span>
+                <span className={styles.phoneNumber}>{user?.email}</span>
               </td>
               <td className={styles.cell}>
                 <span className={styles.location}>{"Auchi Edo State"}</span>
