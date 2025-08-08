@@ -1,6 +1,8 @@
 import useAuthStore from "@/stores/useAuth"
 import styles from "./home.module.css"
 import UsersSummary from "@/components/UsersSummary/UsersSummary"
+import FinanceSummary from "./Components/finance-summary"
+import TableSummary from "./Components/table-summary"
 
 export default function Home() {
     const user = useAuthStore((state)=> state.user)
@@ -16,7 +18,12 @@ export default function Home() {
 
                 <img src={user?.pfp} className={styles.img} />
             </nav>
+            <div className="flex flex-col gap-5">
             <UsersSummary />
+            <FinanceSummary/>
+            <TableSummary/>
+            
+                            </div>
         </section>
     )
 }

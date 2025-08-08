@@ -14,6 +14,7 @@ function App() {
         <AppRoutes />
       </BrowserRouter>
     </ThemeProvider>
+    
   )
 }
 

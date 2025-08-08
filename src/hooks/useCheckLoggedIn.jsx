@@ -12,6 +12,8 @@ function useCheckLoggedin() {
             if(user){
                 setUser(user)
                 console.log("user:", user)
+                  const token = localStorage.getItem("accessToken");
+                  console.log(token)
             }else{
                 setUser(null)
             }
