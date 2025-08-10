@@ -11,6 +11,7 @@ async function getFinanceSummary(){
         return data.data
     }catch(err){
         throw err
+        console.log(err)
     }
 }
 
