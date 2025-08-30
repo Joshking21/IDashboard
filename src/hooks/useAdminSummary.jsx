@@ -10,8 +10,8 @@ async function getFinanceSummary(){
         const data = await sendHttp(method, URL, token)
         return data.data
     }catch(err){
-        throw err
         console.log(err)
+        throw err
     }
 }
 
