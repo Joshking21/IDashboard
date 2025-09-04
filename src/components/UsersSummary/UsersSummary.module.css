@@ -5,8 +5,9 @@
     border-radius: 20px;
     background: linear-gradient(90deg, #2AC769, #2C9455);
     margin-top: 1rem;
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    /* display: flex;
+    flex-direction: row; */
     justify-content: space-between;
     gap: 1rem;
 }

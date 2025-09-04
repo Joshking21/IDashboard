@@ -3,89 +3,91 @@ import styles from "./UserTable.module.css";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import useUserID from "@/stores/useUserID";
 
-const UserTable = ({ userData, state }) => {
-  const [hoveredRow, setHoveredRow] = useState(null);
-  const [hoveredAction, setHoveredAction] = useState(null);
-  const { setUserId } = useUserID();
+const UserTable = ({ userData, state, windowWidth }) => {
+    const [hoveredRow, setHoveredRow] = useState(null);
+    const [hoveredAction, setHoveredAction] = useState(null);
+    const { setUserId } = useUserID();
 
-  //   const userData = [
-  //     { id: 1, name: 'Edafe Jesugare', phone: '09123667654', location: 'Auchi Edo state' },
-  //     { id: 2, name: 'Edafe Jesugare', phone: '09123667654', location: 'Auchi Edo state' },
-  //     { id: 3, name: 'Edafe Jesugare', phone: '09123667654', location: 'Auchi Edo state' },
-  //     { id: 4, name: 'Edafe Jesugare', phone: '09123667654', location: 'Auchi Edo state' },
-  //     { id: 5, name: 'Edafe Jesugare', phone: '09123667654', location: 'Auchi Edo state' },
-  //     { id: 6, name: 'Edafe Jesugare', phone: '09123667654', location: 'Auchi Edo state' },
-  //     { id: 7, name: 'Edafe Jesugare', phone: '09123667654', location: 'Auchi Edo state' },
-  //     { id: 8, name: 'Edafe Jesugare', phone: '09123667654', location: 'Auchi Edo state' }
-  //   ];
+    const getTableStyle = () => {
+      if (windowWidth < 375) {
+        return { fontSize: '12px' };
+      } else if (windowWidth < 768) {
+        return { fontSize: '13px' };
+      } else {
+        return { fontSize: '14px' };
+      }
+    };
 
-  const getInitials = (name) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase();
-  };
+    const getAvatarStyle = () => {
+      if (windowWidth < 375) {
+        return { width: '32px', height: '32px' };
+      } else if (windowWidth < 768) {
+        return { width: '36px', height: '36px' };
+      } else {
+        return { width: '40px', height: '40px' };
+      }
+    };
 
-  return (
-    <div className={styles.tableContainer}>
-      <table className={styles.table}>
-        <thead>
-          <tr className={styles.headerRow}>
-            <th className={styles.headerCell}>User Name</th>
-            <th className={styles.headerCell}>Email</th>
-            <th className={styles.headerCell}>Location</th>
-            <th className={styles.headerCell}></th>
-          </tr>
-        </thead>
-        <tbody>
-          {userData &&
-            userData.map((user) => (
-              <tr
-                key={user?.id}
-                className={`${styles.row} ${
-                  hoveredRow === user?.id ? styles.rowHover : ""
-                }`}
-                onMouseEnter={() => setHoveredRow(user?.id)}
-                onMouseLeave={() => setHoveredRow(null)}
-                onClick={() => {
-                  state(false);
-                  setUserId(user?.id);
-                }}
-              >
-                <td className={styles.cell}>
-                  <div className={styles.userCell}>
-                    <div className={styles.avatar}>
-                      <img src={user?.pfp} />
-                    </div>
-                    <span className={styles.userName}>
-                      {user?.first_name} {user?.last_name}
-                    </span>
-                  </div>
-                </td>
-                <td className={styles.cell}>
-                  <span className={styles.phoneNumber}>{user?.email}</span>
-                </td>
-                <td className={styles.cell}>
-                  <span className={styles.location}>{"Auchi Edo State"}</span>
-                </td>
-                <td className={`${styles.cell} ${styles.tightCell}`}>
-                  <button
-                    className={`${styles.actionButton} ${
-                      hoveredAction === user?.id ? styles.actionButtonHover : ""
-                    }`}
-                    onMouseEnter={() => setHoveredAction(user.id)}
-                    onMouseLeave={() => setHoveredAction(null)}
-                  >
-                    <MoreVertIcon fontSize="small" />
-                  </button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
-    </div>
-  );
+    return (
+        <div className={styles.tableContainer}>
+            <table className={styles.table} style={getTableStyle()}>
+                <thead>
+                    <tr className={styles.headerRow}>
+                        <th className={styles.headerCell}>User Name</th>
+                        <th className={styles.headerCell}>Email</th>
+                        {windowWidth >= 768 && <th className={styles.headerCell}>Location</th>}
+                        <th className={styles.headerCell}></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {userData &&
+                        userData.map((user) => (
+                            <tr
+                                key={user?.id}
+                                className={`${styles.row} ${hoveredRow === user?.id ? styles.rowHover : ""}`}
+                                onMouseEnter={() => setHoveredRow(user?.id)}
+                                onMouseLeave={() => setHoveredRow(null)}
+                                onClick={() => {
+                                    state(false);
+                                    setUserId(user?.id);
+                                }}
+                            >
+                                <td className={styles.cell}>
+                                    <div className={styles.userCell}>
+                                        <div 
+                                          className={styles.avatar} 
+                                          style={getAvatarStyle()}
+                                        >
+                                            <img src={user?.pfp} />
+                                        </div>
+                                        <span className={styles.userName}>
+                                            {user?.first_name} {user?.last_name}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td className={styles.cell}>
+                                    <span className={styles.phoneNumber}>{user?.email}</span>
+                                </td>
+                                {windowWidth >= 768 && (
+                                    <td className={styles.cell}>
+                                        <span className={styles.location}>{"Auchi Edo State"}</span>
+                                    </td>
+                                )}
+                                <td className={`${styles.cell} ${styles.tightCell}`}>
+                                    <button
+                                        className={`${styles.actionButton} ${hoveredAction === user?.id ? styles.actionButtonHover : ""}`}
+                                        onMouseEnter={() => setHoveredAction(user.id)}
+                                        onMouseLeave={() => setHoveredAction(null)}
+                                    >
+                                        <MoreVertIcon fontSize="small" />
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                </tbody>
+            </table>
+        </div>
+    );
 };
 
 export default UserTable;
