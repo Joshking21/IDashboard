@@ -6,7 +6,13 @@ export default function Layout() {
     return (
         <section className={styles.container}>
             <SideNav />
-            <Outlet />
+            <div style={{ 
+                flex: 1, 
+                overflow: 'auto',
+                padding: '16px'
+            }}>
+                <Outlet />
+            </div>
         </section>
     )
 }

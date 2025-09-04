@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Dot, ListFilter, Search } from "lucide-react";
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Sheet,
   SheetContent,
@@ -13,6 +13,7 @@ import useGetFinanceSummary from "@/hooks/useAdminSummary";
 import useGetTransactionDetailSummary from "@/hooks/useTransactionDetailsSummary";
 import useUserID from "@/stores/useUserID";
 import SmallLoadingPage from "@/pages/small-loading";
+import useGetPaid from "@/hooks/useCheckedPaid";
 
 // UserDetail Component
 const UserDetail = ({ user, title }) => (
@@ -74,13 +75,78 @@ const TableCell = ({ children, style }) => (
   </td>
 );
 
-export default function TableSummary() {
+export default function TableSummary({ windowWidth }) {
   const [changeTable, setChangeTable] = React.useState(true);
   const { userId, setUserId } = useUserID();
   const [isMobile, setIsMobile] = React.useState(window.innerWidth < 768);
   const [isTablet, setIsTablet] = React.useState(
     window.innerWidth >= 768 && window.innerWidth < 1024
   );
+    const getContainerStyle = () => {
+      if (windowWidth < 375) { // mobileS
+        return {
+          padding: "8px",
+          gap: "12px"
+        };
+      } else if (windowWidth < 425) { // mobileM
+        return {
+          padding: "10px",
+          gap: "12px"
+        };
+      } else if (windowWidth < 768) { // mobileL
+        return {
+          padding: "12px",
+          gap: "14px"
+        };
+      } else if (windowWidth < 1024) { // tablet
+        return {
+          padding: "14px",
+          gap: "16px"
+        };
+      } else { // laptop and larger
+        return {
+          padding: "16px",
+          gap: "16px"
+        };
+      }
+    };
+
+    const getButtonStyle = () => {
+      const baseStyle = {
+        padding: "8px 16px",
+        borderRadius: "24px",
+        fontSize: windowWidth < 768 ? "12px" : "14px",
+      };
+      
+      return baseStyle;
+    };
+
+    const getSearchStyle = () => {
+      if (windowWidth < 375) {
+        return {
+          padding: "6px 8px",
+          fontSize: "12px"
+        };
+      } else if (windowWidth < 768) {
+        return {
+          padding: "8px 10px",
+          fontSize: "13px"
+        };
+      } else {
+        return {
+          padding: "8px 12px",
+          fontSize: "14px"
+        };
+      }
+    };
+
+
+  const {
+    mutate,
+    isPending: getPaidIsPending,
+    isError: getPaidIsError,
+    error: getPaidError,
+  } = useGetPaid();
 
   const {
     data: summaryTransactions,
@@ -92,7 +158,8 @@ export default function TableSummary() {
 
   const { data: summaryTransactionsDetails } =
     useGetTransactionDetailSummary(userId);
-  console.log(summaryTransactions);
+  // console.log(summaryTransactions);
+  console.log(summaryTransactionsDetails);
 
   // Handle window resize for responsiveness
   useEffect(() => {
@@ -121,58 +188,56 @@ export default function TableSummary() {
 
   return (
     <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "16px",
-        padding: isMobile ? "8px" : "16px",
-        border: "1px solid #8C8C8C42",
-        borderRadius: "24px",
-      }}
-    >
+            style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "16px",
+                border: "1px solid #8C8C8C42",
+                borderRadius: "24px",
+                ...getContainerStyle()
+            }}
+        >
       {/* Toggle buttons */}
-      <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-        <button
-          style={{
-            padding: "8px 16px",
-            borderRadius: "24px",
-            border: changeTable ? "none" : "1px solid #8C8C8C42",
-            backgroundColor: changeTable ? "#1AB168" : "transparent",
-            color: changeTable ? "white" : "inherit",
-            fontSize: isMobile ? "0.8rem" : "0.9rem",
-            cursor: "pointer",
-          }}
-          onClick={() => setChangeTable(true)}
-        >
-          Withdraw Request
-        </button>
-        <button
-          style={{
-            padding: "8px 16px",
-            borderRadius: "24px",
-            border: !changeTable ? "none" : "1px solid #8C8C8C42",
-            backgroundColor: !changeTable ? "#1AB168" : "transparent",
-            color: !changeTable ? "white" : "inherit",
-            fontSize: isMobile ? "0.8rem" : "0.9rem",
-            cursor: "pointer",
-          }}
-          onClick={() => setChangeTable(false)}
-        >
-          Received Payment
-        </button>
-      </div>
+            <div style={{ 
+                display: "flex", 
+                gap: "8px", 
+                flexWrap: windowWidth < 425 ? "wrap" : "nowrap" 
+            }}>
+                <button
+                    style={{
+                        ...getButtonStyle(),
+                        border: changeTable ? "none" : "1px solid #8C8C8C42",
+                        backgroundColor: changeTable ? "#1AB168" : "transparent",
+                        color: changeTable ? "white" : "inherit",
+                    }}
+                    onClick={() => setChangeTable(true)}
+                >
+                    Withdraw Request
+                </button>
+                <button
+                    style={{
+                        ...getButtonStyle(),
+                        border: !changeTable ? "none" : "1px solid #8C8C8C42",
+                        backgroundColor: !changeTable ? "#1AB168" : "transparent",
+                        color: !changeTable ? "white" : "inherit",
+                    }}
+                    onClick={() => setChangeTable(false)}
+                >
+                    Received Payment
+                </button>
+            </div>
 
       {/* Search and filter */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          border: "1px solid #8C8C8C42",
-          borderRadius: "24px",
-          padding: isMobile ? "6px 8px" : "8px 12px",
-        }}
-      >
+       <div
+                style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    border: "1px solid #8C8C8C42",
+                    borderRadius: "24px",
+                    ...getSearchStyle()
+                }}
+            >
         <div
           style={{
             display: "flex",
@@ -240,7 +305,7 @@ export default function TableSummary() {
                   <TableCell>
                     {user?.agent?.account?.accountNumber || "N/A"}
                   </TableCell>
-                  <TableCell>{user?.amount || "0"}</TableCell>
+                  <TableCell>₦{user?.amount || "0"}</TableCell>
                   <TableCell>
                     <span
                       style={{
@@ -281,12 +346,11 @@ export default function TableSummary() {
                 </TableHeader>
                 <TableHeader>Amount</TableHeader>
                 <TableHeader>Date/Time</TableHeader>
-                <TableHeader>Status</TableHeader>
                 <TableHeader>Actions</TableHeader>
               </tr>
             </thead>
             <tbody>
-              {summaryTransactions.receivedPayments.map((user, index) => (
+              {summaryTransactions?.receivedPayments?.map((user, index) => (
                 <tr
                   key={index}
                   onClick={() => setUserId(user?.agent?.user?.id)}
@@ -311,24 +375,9 @@ export default function TableSummary() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <span
-                      style={{
-                        padding: "4px 8px",
-                        borderRadius: "12px",
-                        fontSize: "0.8rem",
-                        backgroundColor:
-                          user.status === "Completed" ? "#E6F7EF" : "#FFF0F0",
-                        color:
-                          user.status === "Completed" ? "#1AB168" : "#FF4D4F",
-                      }}
-                    >
-                      {user.status}
-                    </span>
-                  </TableCell>
-                  <TableCell>
                     <Sheet>
                       <SheetTrigger asChild>
-                        <Button variant="ghost" size="sm">
+                        <Button variant="ghost" style={{padding:"5px"}} size="sm">
                           View
                         </Button>
                       </SheetTrigger>
@@ -412,13 +461,19 @@ export default function TableSummary() {
                           >
                             <p style={{ margin: "0", fontWeight: "500" }}>
                               <span>Bank Name:</span>{" "}
-                              {summaryTransactionsDetails?.userDetails
-                                ?.bankName || "N/A"}
+                              <span className="text-black">
+                                {" "}
+                                {summaryTransactionsDetails?.userDetails
+                                  ?.bankName || "N/A"}
+                              </span>
                             </p>
                             <p style={{ margin: "0", fontWeight: "500" }}>
                               <span>Account Number:</span>{" "}
-                              {summaryTransactionsDetails?.userDetails
-                                ?.accountNumber || "N/A"}
+                              <span className="text-black">
+                                {" "}
+                                {summaryTransactionsDetails?.userDetails
+                                  ?.accountNumber || "N/A"}
+                              </span>
                             </p>
                           </div>
 
@@ -430,6 +485,7 @@ export default function TableSummary() {
                           >
                             <p
                               style={{ fontWeight: "500", marginBottom: "8px" }}
+                              className="text-black"
                             >
                               Withdrawal Request
                             </p>
@@ -440,24 +496,50 @@ export default function TableSummary() {
                                 gap: "8px",
                               }}
                             >
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                }}
-                              >
-                                <span>₦3,000</span>
-                                <span style={{ color: "#1AB168" }}>Paid</span>
-                              </div>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                }}
-                              >
-                                <span>₦3,000</span>
-                                <span style={{ color: "#FF4D4F" }}>Pay</span>
-                              </div>
+                              {summaryTransactionsDetails?.withdrawalRequest?.map(
+                                (item, index) => (
+                                  <div
+                                    key={index}
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "space-between",
+                                    }}
+                                  >
+                                    <p className="flex items-center justify-center">
+                                      ₦{item?.amount ?? "N/A"}
+                                    </p>
+                                    {item?.isProcessed ? (
+                                      <p
+                                        style={{ color: "#1AB168",
+                                          padding: "2px",
+                                          paddingLeft: "20px",
+                                          paddingRight: "20px", }}
+                                        className="border border-[#1AB168] bg-[#2AC7690D] rounded-3xl"
+                                      >
+                                        Paid
+                                      </p>
+                                    ) : (
+                                      <button
+                                        style={{
+                                          color: "#FF4D4F",
+                                          padding: "2px",
+                                          paddingLeft: "20px",
+                                          paddingRight: "20px",
+                                        }}
+                                        disabled={getPaidIsPending}
+                                        onClick={() => mutate(item?.id)}
+                                        className="text-[#A66F18] border hover:opacity-70 border-[#A66F18] rounded-lg bg-[#F9EFDE] "
+                                      >
+                                        {getPaidIsPending
+                                          ? "Paying..."
+                                          : getPaidIsError
+                                          ? getPaidError
+                                          : "Pay"}
+                                      </button>
+                                    )}
+                                  </div>
+                                )
+                              )}
                             </div>
                           </div>
 
@@ -478,8 +560,8 @@ export default function TableSummary() {
                                   marginBottom: "8px",
                                 }}
                               >
-                                <span>Date</span>
-                                <span>Amount</span>
+                                <span className="text-black">Date</span>
+                                <span className="text-black">Amount</span>
                               </div>
                               {summaryTransactionsDetails?.transactionHistory?.map(
                                 (item, index) => (

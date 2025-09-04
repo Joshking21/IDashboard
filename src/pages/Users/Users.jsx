@@ -1,8 +1,6 @@
 import { InputAdornment, TextField } from "@mui/material";
 import styles from "./Users.module.css";
-import SvgIconRect from "../../../components/SvgIcon/svgIconRect";
-import searchIcon from "@assets/icon/search-normal.svg";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useGetUserSummary from "@/hooks/useGetUserSummary";
 import UserTable from "@/components/UserTable/UserTable";
 import { Button } from "@/components/ui/button";
@@ -38,6 +36,49 @@ export default function Users() {
 
   // Responsive breakpoints
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+   useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const getContainerStyle = () => {
+      if (windowWidth < 375) {
+        return { padding: "8px" };
+      } else if (windowWidth < 425) {
+        return { padding: "10px" };
+      } else if (windowWidth < 768) {
+        return { padding: "12px" };
+      } else if (windowWidth < 1024) {
+        return { padding: "14px" };
+      } else {
+        return { padding: "16px" };
+      }
+    };
+
+    const getUserInfoCardStyle = () => {
+      if (windowWidth < 768) {
+        return {
+          display: "block",
+          gap: "8px",
+          padding: "8px",
+          borderRadius: "16px",
+          marginBottom: "12px"
+        };
+      } else {
+        return {
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "10px",
+          padding: "10px",
+          borderRadius: "24px",
+          marginBottom: "16px"
+        };
+      }
+    };
 
   // Add resize listener (you might want to use a useEffect for this in a real app)
   // This is simplified for the example
@@ -279,27 +320,30 @@ export default function Users() {
         isLoading ? (
           <LoadingPage />
         ) : (
-          <section style={responsiveStyles.container}>
+          <section style={getContainerStyle()}>
             <h1 className={styles.userCount}>
               User List
               <span>
                 {usersSummary?.usersCount ?? "N/A"}
               </span>
             </h1>
-            <UserTable userData={usersSummary?.totalUsers} state={setStater} />
+            <UserTable userData={usersSummary?.totalUsers} state={setStater}  windowWidth={windowWidth} />
           </section>
         )
       ) : loading ? (
         <LoadingPage />
       ) : (
-        <section style={responsiveStyles.container}>
+      <section style={getContainerStyle()} className="">
           <ArrowLeft
             onClick={() => setStater(true)}
-            style={responsiveStyles.backButton}
+            style={{ marginBottom: "16px", cursor: "pointer" }}
           />
 
           {/* User Info Card */}
-          <div style={responsiveStyles.userInfoCard}>
+          <div style={{
+                        background: "linear-gradient(to right, #2AC769, #2C9455)",
+                        ...getUserInfoCardStyle()
+                    }}>
             {TopUserDetails?.map((item, index) => {
               const Icon = item.pfp;
               return (
@@ -602,12 +646,15 @@ export default function Users() {
                         >
                           <SheetHeader>
                             <SheetTitle>Transaction Details</SheetTitle>
-                            <SheetDescription
+                            
+                          </SheetHeader>
+                            <div
                               style={{
                                 display: "flex",
                                 flexDirection: "column",
                                 gap: "12px",
                               }}
+                              className="overflow-y-auto"
                             >
                               <div
                                 style={{
@@ -763,8 +810,7 @@ export default function Users() {
                                   ))}
                                 </div>
                               </div>
-                            </SheetDescription>
-                          </SheetHeader>
+                            </div>
                         </SheetContent>
                       </Sheet>
                     </div>

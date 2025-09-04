@@ -14,6 +14,7 @@ export default function RoundedInput({
     touched, 
     errors,
     disabled,
+    windowWidth
 }) {
     const [showPassword, setShowPassword] = useState(false)
 
@@ -23,7 +24,11 @@ export default function RoundedInput({
     
     return (
         <>
-        <Typography sx={{fontSize: "12px", color: "#2D2D2D"}}>
+        <Typography sx={{
+            fontSize: windowWidth < 768 ? "11px" : "12px", 
+            color: "#2D2D2D",
+            marginBottom: "4px"
+        }}>
             {label}
         </Typography>
         <TextField
@@ -46,6 +51,7 @@ export default function RoundedInput({
                                 onClick={handleTogglePasswordVisibility}
                                 edge="end"
                                 className={styles.visibilityIcon}
+                                size={windowWidth < 768 ? "small" : "medium"}
                             >
                                 {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                             </IconButton>
@@ -56,9 +62,9 @@ export default function RoundedInput({
             sx={{
                 '& .MuiOutlinedInput-root': {
                 borderRadius: '50px',
-                fontSize: "12px",
+                fontSize: windowWidth < 768 ? "11px" : "12px",
                 color: 'var(--white-500)',
-                mb: 0
+                mb: 1
                 },
                 '& .MuiOutlinedInput-input::placeholder': {
                 color: 'var(--white-500)',
