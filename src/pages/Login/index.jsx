@@ -21,12 +21,12 @@ import { useState, useEffect } from "react";
 const formInputs = [
   {
     name: "email",
-    label: "Email",
+    label: "",
     placeholder: "Enter Email Address",
   },
   {
     name: "password",
-    label: "Password",
+    label: "",
     placeholder: "Enter Password",
   },
 ];
@@ -102,13 +102,16 @@ export default function Login() {
           <SvgIcon src={logo} {...getLogoSize()} />
           <p
             className={styles.caption}
-            style={{ fontSize: windowWidth < 768 ? "20px" : "24px" }}
+            style={{
+              fontSize: windowWidth < 768 ? "24px" : "32px",
+             
+            }}
           >
             Login to your Admin Account
           </p>
           <p
             className={styles.subheading}
-            style={{ fontSize: windowWidth < 768 ? "14px" : "16px" }}
+            style={{ fontSize: windowWidth < 768 ? "8px" : "12px" }}
           >
             Welcome back! So glad to have you back again.
           </p>
@@ -195,6 +198,7 @@ export default function Login() {
                     style={{
                       padding: windowWidth < 768 ? "10px 16px" : "12px 24px",
                       fontSize: windowWidth < 768 ? "14px" : "16px",
+                      fontFamily:"poppins"
                     }}
                     startIcon={
                       isSubmitting ||

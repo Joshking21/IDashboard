@@ -1,6 +1,7 @@
 import { InputAdornment, TextField } from "@mui/material";
 import styles from "./Users.module.css";
 import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import useGetUserSummary from "@/hooks/useGetUserSummary";
 import UserTable from "@/components/UserTable/UserTable";
 import { Button } from "@/components/ui/button";
@@ -324,27 +325,81 @@ export default function Users() {
         isLoading ? (
           <LoadingPage />
         ) : (
-          <section style={responsiveStyles.container}>
-            <h1 className={styles.userCount}>
-              User List
-              <span>
-                {usersSummary?.usersCount ?? "N/A"}
-              </span>
-            </h1>
-            <UserTable userData={usersSummary?.totalUsers} state={setStater} />
+          <section style={getContainerStyle()}>
+            <div
+              className="border rounded-lg"
+              style={{
+                padding: "14px",
+                paddingTop: "33px",
+                paddingBottom: "33px",
+              }}
+            >
+              <h1 className={styles.userCount}>
+                User List
+                <Dot className="text-[#1AB168] " />
+                <span className="text-[#1AB168]">
+                  {usersSummary?.usersCount ?? "N/A"}
+                </span>
+              </h1>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  width:
+                    screenSize === "mobileS" || "mobileM" || "mobileL"
+                      ? "100%"
+                      : "100%",
+                  padding: "12px",
+                  borderRadius: "22px",
+                }}
+                className="border border-[#8C8C8C42] shadow-sm"
+              >
+                <Search
+                  size={
+                    screenSize === "mobileS" || "mobileM" || "mobileL" ? 16 : 20
+                  }
+                  className="text-[#888888]"
+                />
+                <input
+                  placeholder="Search"
+                  style={{
+                    width: "100%",
+                    border: "none",
+                    outline: "none",
+                    fontSize:
+                      screenSize === "mobileS" || "mobileM" || "mobileL"
+                        ? "0.8rem"
+                        : "0.9rem",
+                    background: "transparent",
+                  }}
+                />
+              </div>
+              <UserTable
+                userData={usersSummary?.totalUsers}
+                state={setStater}
+                windowWidth={windowWidth}
+              />
+            </div>
           </section>
         )
       ) : loading ? (
         <LoadingPage />
       ) : (
-        <section style={responsiveStyles.container}>
+        <section style={getContainerStyle()} className="">
           <ArrowLeft
             onClick={() => setStater(true)}
-            style={responsiveStyles.backButton}
+            style={{ padding: "8px", marginBottom: "16px", cursor: "pointer" }}
+            className="border bg-[#2AC7690D] border-[#1AB168] rounded-full w-[34px] h-[34px] hover:opacity-50"
           />
 
           {/* User Info Card */}
-          <div style={responsiveStyles.userInfoCard}>
+          <div
+            style={{
+              background: "linear-gradient(to right, #2AC769, #2C9455)",
+              ...getUserInfoCardStyle(),
+            }}
+          >
             {TopUserDetails?.map((item, index) => {
               const Icon = item.pfp;
               return (
