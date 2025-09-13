@@ -37,7 +37,8 @@ export default function Home() {
       <nav className={styles.header} style={{
         flexDirection: windowWidth < 768 ? 'column' : 'row',
         alignItems: windowWidth < 768 ? 'flex-start' : 'center',
-        gap: windowWidth < 768 ? '12px' : '0'
+        gap: windowWidth < 768 ? '12px' : '0',
+        fontFamily:"poppins"
       }}>
         <div className={styles.nameCont}>
           <p className={styles.name}>Hi {user?.first_name}</p>

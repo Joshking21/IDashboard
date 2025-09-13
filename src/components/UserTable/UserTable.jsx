@@ -20,19 +20,19 @@ const UserTable = ({ userData, state, windowWidth }) => {
 
     const getAvatarStyle = () => {
       if (windowWidth < 375) {
-        return { width: '32px', height: '32px' };
+        return { width: '12px', height: '12px' };
       } else if (windowWidth < 768) {
-        return { width: '36px', height: '36px' };
+        return { width: '16px', height: '16px' };
       } else {
-        return { width: '40px', height: '40px' };
+        return { width: '20px', height: '20px' };
       }
     };
 
     return (
         <div className={styles.tableContainer}>
             <table className={styles.table} style={getTableStyle()}>
-                <thead>
-                    <tr className={styles.headerRow}>
+                <thead className="rounded-full">
+                    <tr  className="rounded-full bg-[#2AC7690D]">
                         <th className={styles.headerCell}>User Name</th>
                         <th className={styles.headerCell}>Email</th>
                         {windowWidth >= 768 && <th className={styles.headerCell}>Location</th>}

@@ -16,6 +16,8 @@
     position: relative;
     display: flex;
     gap: 0.7rem;
+    flex-wrap: nowrap;
+    
 }
 
 .svgCont{
@@ -23,13 +25,14 @@
     width: 40px;
     position: relative;
     border-radius: 50%;
-    border: 3px solid #fff;
+    border: 2px solid #fff;
     display: grid;
     place-items: center;
 }
 
 .textCont{
     position: relative;
+    width: max-content;
 }
 
 .textCont p{

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import LoadingPage from "../loading";
 import {
   ArrowLeft,
+  ArrowRight,
   Dot,
   DotIcon,
   ListFilter,
@@ -14,6 +15,7 @@ import {
   MapPin,
   Phone,
   MoveRight,
+  Search,
 } from "lucide-react";
 import {
   Sheet,
@@ -36,49 +38,49 @@ export default function Users() {
 
   // Responsive breakpoints
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-   useEffect(() => {
-        const handleResize = () => {
-            setWindowWidth(window.innerWidth);
-        };
-
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-    const getContainerStyle = () => {
-      if (windowWidth < 375) {
-        return { padding: "8px" };
-      } else if (windowWidth < 425) {
-        return { padding: "10px" };
-      } else if (windowWidth < 768) {
-        return { padding: "12px" };
-      } else if (windowWidth < 1024) {
-        return { padding: "14px" };
-      } else {
-        return { padding: "16px" };
-      }
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
     };
 
-    const getUserInfoCardStyle = () => {
-      if (windowWidth < 768) {
-        return {
-          display: "block",
-          gap: "8px",
-          padding: "8px",
-          borderRadius: "16px",
-          marginBottom: "12px"
-        };
-      } else {
-        return {
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "10px",
-          padding: "10px",
-          borderRadius: "24px",
-          marginBottom: "16px"
-        };
-      }
-    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const getContainerStyle = () => {
+    if (windowWidth < 375) {
+      return { padding: "6px" };
+    } else if (windowWidth < 425) {
+      return { padding: "8px" };
+    } else if (windowWidth < 768) {
+      return { padding: "10px" };
+    } else if (windowWidth < 1024) {
+      return { padding: "12px" };
+    } else {
+      return { padding: "12px" };
+    }
+  };
+
+  const getUserInfoCardStyle = () => {
+    if (windowWidth < 768) {
+      return {
+        display: "block",
+        gap: "8px",
+        padding: "8px",
+        borderRadius: "16px",
+        marginBottom: "12px",
+      };
+    } else {
+      return {
+        display: "flex",
+        flexWrap: "wrap",
+        gap: "10px",
+        padding: "10px",
+        borderRadius: "24px",
+        marginBottom: "16px",
+      };
+    }
+  };
 
   // Add resize listener (you might want to use a useEffect for this in a real app)
   // This is simplified for the example
@@ -176,8 +178,9 @@ export default function Users() {
 
     // Table styles
     tableHeader: {
-      padding: screenSize === "mobileS" ? "4px" : "6px",
+      padding: screenSize === "mobileS" ? "4px" : "8px",
       backgroundColor: "#2AC7690D",
+      color: "#888888",
     },
 
     tableCell: {
@@ -186,8 +189,10 @@ export default function Users() {
           ? "12px 4px"
           : screenSize === "mobileL"
           ? "16px 6px"
-          : "25px",
+          : "20px",
+      // borderBottom:"0.5px #888888 solid",
       textAlign: "left",
+      fontSize: "12px",
     },
 
     // Button group styles
@@ -202,7 +207,6 @@ export default function Users() {
           ? "flex-start"
           : "center",
       padding: "10px",
-      borderBottom: "1px solid #e0e0e0",
     },
 
     filterGroup: {
@@ -304,7 +308,7 @@ export default function Users() {
     },
     {
       title: "Bank Name",
-      pfp: Landmark,
+      pfp: "/bank.svg",
       desc: usersDetails?.agent?.account?.bankName || "N/A",
     },
     {
@@ -321,56 +325,115 @@ export default function Users() {
           <LoadingPage />
         ) : (
           <section style={getContainerStyle()}>
-            <h1 className={styles.userCount}>
-              User List
-              <span>
-                {usersSummary?.usersCount ?? "N/A"}
-              </span>
-            </h1>
-            <UserTable userData={usersSummary?.totalUsers} state={setStater}  windowWidth={windowWidth} />
+            <div
+              className="border rounded-lg"
+              style={{
+                padding: "14px",
+                paddingTop: "33px",
+                paddingBottom: "33px",
+              }}
+            >
+              <h1 className={styles.userCount}>
+                User List
+                <Dot className="text-[#1AB168] " />
+                <span className="text-[#1AB168]">
+                  {usersSummary?.usersCount ?? "N/A"}
+                </span>
+              </h1>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  width:
+                    screenSize === "mobileS" || "mobileM" || "mobileL"
+                      ? "100%"
+                      : "100%",
+                  padding: "12px",
+                  borderRadius: "22px",
+                }}
+                className="border border-[#8C8C8C42] shadow-sm"
+              >
+                <Search
+                  size={
+                    screenSize === "mobileS" || "mobileM" || "mobileL" ? 16 : 20
+                  }
+                  className="text-[#888888]"
+                />
+                <input
+                  placeholder="Search"
+                  style={{
+                    width: "100%",
+                    border: "none",
+                    outline: "none",
+                    fontSize:
+                      screenSize === "mobileS" || "mobileM" || "mobileL"
+                        ? "0.8rem"
+                        : "0.9rem",
+                    background: "transparent",
+                  }}
+                />
+              </div>
+              <UserTable
+                userData={usersSummary?.totalUsers}
+                state={setStater}
+                windowWidth={windowWidth}
+              />
+            </div>
           </section>
         )
       ) : loading ? (
         <LoadingPage />
       ) : (
-      <section style={getContainerStyle()} className="">
+        <section style={getContainerStyle()} className="">
           <ArrowLeft
             onClick={() => setStater(true)}
-            style={{ marginBottom: "16px", cursor: "pointer" }}
+            style={{ padding: "8px", marginBottom: "16px", cursor: "pointer" }}
+            className="border bg-[#2AC7690D] border-[#1AB168] rounded-full w-[34px] h-[34px] hover:opacity-50"
           />
 
           {/* User Info Card */}
-          <div style={{
-                        background: "linear-gradient(to right, #2AC769, #2C9455)",
-                        ...getUserInfoCardStyle()
-                    }}>
+          <div
+            style={{
+              background: "linear-gradient(to right, #2AC769, #2C9455)",
+              ...getUserInfoCardStyle(),
+            }}
+          >
             {TopUserDetails?.map((item, index) => {
               const Icon = item.pfp;
               return (
                 <div
                   key={index}
                   style={responsiveStyles.userInfoItem}
-                  className="flex gap-3 rounded-full"
+                  className="flex gap-3 rounded-full items-center w-fit justify-center"
                 >
                   {item.pfp && typeof item.pfp === "string" ? (
                     <img
                       src={item.pfp}
-                      className="w-10 h-10 rounded-full border-2 border-white"
+                      className={`w-10 h-10 rounded-full  border-2 border-white`}
                       loading="lazy"
+                      style={{ padding: index === 3 ? "4px" : "" }}
                     />
                   ) : item.pfp ? (
                     <Icon
                       className="w-10 h-10 border-2 border-white rounded-full text-white  "
-                      style={{ padding: "10px" }}
+                      style={{ padding: "5px" }}
                     />
                   ) : (
                     ""
                   )}
-                  <div>
+                  {index === 4 && (
+                    <ArrowRight
+                      className="w-5 text-white "
+                      style={{ marginRight: "20px" }}
+                    />
+                  )}
+                  <div className={``}>
                     <p
                       style={{
                         margin: "0 0 4px 0",
                         fontSize: screenSize === "mobileS" ? "12px" : "14px",
+                        color: "white",
                       }}
                     >
                       {item.title}
@@ -378,8 +441,8 @@ export default function Users() {
                     <p
                       style={{
                         margin: 0,
-                        fontSize: screenSize === "mobileS" ? "12px" : "14px",
-                        fontWeight: "bold",
+                        fontSize: screenSize === "mobileS" ? "14px" : "16px",
+                        color: "white",
                       }}
                     >
                       {item.desc}
@@ -398,14 +461,17 @@ export default function Users() {
                   margin: "0 0 10px 0",
                   paddingBottom: "8px",
                   borderBottom: "1px solid #e0e0e0",
+                  fontWeight: "bold",
+                  fontFamily: "poppins",
                 }}
               >
                 Request
               </p>
-              {usersDetails?.requests?.length > 0 ? (
-                usersDetails?.requests.map((item, index) => (
-                  <div key={index}>
+              <div className="flex flex-col gap-3">
+                {usersDetails?.requests?.length > 0 ? (
+                  usersDetails?.requests.map((item, index) => (
                     <div
+                      key={index}
                       style={{
                         display: "flex",
                         justifyContent: "space-between",
@@ -413,14 +479,13 @@ export default function Users() {
                         border: "1px solid #e0e0e0",
                         borderRadius: "4px",
                       }}
+                      className=""
                     >
-                      <div>
-                        <p style={{ margin: "0 0 4px 0", fontSize: "13px" }}>
-                          {item?.location}
-                        </p>
+                      <div className="text-[12px]">
+                        <p style={{ margin: "0 0 4px 0" }}>{item?.location}</p>
                         <p style={{ margin: 0 }}>{item?.type}</p>
                       </div>
-                      <div style={{ textAlign: "right" }}>
+                      <div style={{ textAlign: "right", fontSize: "8px" }}>
                         <p style={{ margin: "0 0 4px 0" }}>
                           {
                             new Date(item?.createdAt)
@@ -433,7 +498,9 @@ export default function Users() {
                             margin: 0,
                             display: "flex",
                             alignItems: "center",
+                            color: "#888888",
                           }}
+                          className="text-[#888888]"
                         >
                           Eyes on it{" "}
                           <span
@@ -446,23 +513,24 @@ export default function Users() {
                         </p>
                       </div>
                     </div>
+                  ))
+                ) : (
+                  <div>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        padding: "8px",
+                        border: "1px solid #e0e0e0",
+                        borderRadius: "4px",
+                      }}
+                      className=""
+                    >
+                      N/A
+                    </div>
                   </div>
-                ))
-              ) : (
-                <div>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      padding: "8px",
-                      border: "1px solid #e0e0e0",
-                      borderRadius: "4px",
-                    }}
-                  >
-                    N/A
-                  </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
 
             <div style={responsiveStyles.tourSection}>
@@ -471,6 +539,8 @@ export default function Users() {
                   margin: "0 0 10px 0",
                   paddingBottom: "8px",
                   borderBottom: "1px solid #e0e0e0",
+                  fontWeight: "bold",
+                  fontFamily: "poppins",
                 }}
               >
                 Tour
@@ -563,6 +633,10 @@ export default function Users() {
                 margin: 0,
                 padding: "10px",
                 borderBottom: "1px solid #e0e0e0",
+                fontWeight: "bold",
+                paddingLeft: "20px",
+                paddingRight: "20px",
+                fontFamily: "poppins",
               }}
             >
               User as Agent Management Board
@@ -577,12 +651,17 @@ export default function Users() {
                       <Button
                         variant={tableState ? "default" : "outline"}
                         style={{
-                          borderRadius: "16px",
-                          paddingLeft: "20px",
-
-                          paddingRight: "20px",
+                          borderRadius: "20px",
+                          paddingLeft: "32px",
+                          paddingRight: "32px",
                           fontSize: screenSize === "mobileS" ? "12px" : "14px",
+                          fontWeight: "500",
                         }}
+                        className={
+                          tableState
+                            ? "border-[#1AB168] border bg-white font-[500] text-[#1AB168] shadow-sm hover:bg-[#ebebeb]/50 "
+                            : "border-[#888888] border font-[500] text-[#888888] shadow-sm hover:bg-[#ebebeb]/50"
+                        }
                         onClick={() => setTableState(true)}
                       >
                         Post
@@ -595,6 +674,11 @@ export default function Users() {
                           paddingRight: "20px",
                           fontSize: screenSize === "mobileS" ? "12px" : "14px",
                         }}
+                        className={
+                          !tableState
+                            ? "border-[#1AB168]  border bg-white font-[500] text-[#1AB168] shadow-sm hover:bg-[#ebebeb]/50 "
+                            : "border-[#888888]  border font-[500] text-[#888888] shadow-sm hover:bg-[#ebebeb]/50"
+                        }
                         onClick={() => setTableState(false)}
                       >
                         Tour Management
@@ -607,7 +691,12 @@ export default function Users() {
                           display: "flex",
                           alignItems: "center",
                           gap: "4px",
+                          backgroundColor: "#2AC7690D",
+                          borderRadius: "62px",
+                          color: "#1AB168",
+                          padding: "10px",
                         }}
+                        className="hover:opacity-70"
                       >
                         <ListFilter size={16} />
                         <span
@@ -622,18 +711,22 @@ export default function Users() {
                       <Sheet>
                         <SheetTrigger>
                           <Button
-                            variant="link"
+                            variant="ghost"
                             style={{
                               fontSize:
                                 screenSize === "mobileS" ? "12px" : "14px",
                             }}
+                            className={
+                              "hover:bg-white text-[#888888] hover:text-black"
+                            }
                           >
                             Transaction Details
+                            <MoveRight />
                           </Button>
                         </SheetTrigger>
                         <SheetContent
                           style={{
-                            padding: "15px",
+                            padding: "16px 0px",
                             width:
                               screenSize === "mobileS"
                                 ? "100%"
@@ -642,20 +735,30 @@ export default function Users() {
                                 : screenSize === "mobileL"
                                 ? "80%"
                                 : "400px",
+                            overflowY: "auto",
                           }}
                         >
-                          <SheetHeader>
+                          <SheetHeader
+                            style={{
+                              marginBottom: "5px",
+                              color: "#2D2D2D",
+                              fontSize: "20px",
+                              fontWeight: "700",
+                              padding: "0px 16px",
+                            }}
+                            className="border-b"
+                          >
                             <SheetTitle>Transaction Details</SheetTitle>
-                            
                           </SheetHeader>
-                            <div
-                              style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: "12px",
-                              }}
-                              className="overflow-y-auto"
-                            >
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "12px",
+                            }}
+                            className="overflow-y-auto"
+                          >
+                            <div style={{ padding: "0px 16px" }}>
                               <div
                                 style={{
                                   display: "flex",
@@ -674,15 +777,23 @@ export default function Users() {
                                     gap: "8px",
                                   }}
                                 >
-                                  <p style={{ margin: 0 }}>Total earned</p>
                                   <p
                                     style={{
                                       margin: 0,
+                                      fontWeight: "400",
                                       fontSize: "18px",
+                                    }}
+                                  >
+                                    Total earned
+                                  </p>
+                                  <p
+                                    style={{
+                                      margin: 0,
+                                      fontSize: "22px",
                                       fontWeight: "bold",
                                     }}
                                   >
-                                    30000
+                                    ₦30000
                                   </p>
                                 </div>
                                 <div
@@ -690,127 +801,165 @@ export default function Users() {
                                     display: "flex",
                                     flexDirection: "column",
                                     gap: "8px",
+                                    fontSize: "22px",
                                   }}
                                 >
                                   <p style={{ margin: 0 }}>Withdrawable</p>
                                   <p
                                     style={{
                                       margin: 0,
-                                      fontSize: "18px",
+                                      fontSize: "1.2rem",
                                       fontWeight: "bold",
                                     }}
                                   >
-                                    30000
+                                    ₦30000
                                   </p>
                                 </div>
                               </div>
-                              <div
-                                style={{
-                                  backgroundColor: "#2AC7690D",
-                                  display: "flex",
-                                  flexDirection: "column",
-                                  gap: "8px",
-                                  borderRadius: "24px",
-                                  padding: "15px",
-                                }}
-                              >
-                                <p style={{ margin: 0 }}>
-                                  <span style={{ fontWeight: "bold" }}>
-                                    Bank Name:
-                                  </span>{" "}
+                            </div>
+                            <div
+                              style={{
+                                backgroundColor: "#2AC7690D",
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "8px",
+                                padding: "16px",
+                              }}
+                            >
+                              <p style={{ margin: 0 }}>
+                                <span style={{ color: "#888888" }}>
+                                  Bank Name:
+                                </span>{" "}
+                                <span
+                                  className="text-black"
+                                  style={{ margin: 0, fontWeight: "500" }}
+                                >
                                   {usersDetails?.agent?.account?.bankName ||
                                     "N/A"}
-                                </p>
-                                <p style={{ margin: 0 }}>
-                                  <span style={{ fontWeight: "bold" }}>
-                                    Account Number:
-                                  </span>{" "}
+                                </span>
+                              </p>
+                              <p style={{ margin: 0 }}>
+                                <span className="text-[#888888]">
+                                  Account Number:
+                                </span>{" "}
+                                <span className="text-black ">
+                                  {" "}
                                   {usersDetails?.agent?.account
                                     ?.accountNumber || "N/A"}
-                                </p>
-                              </div>
+                                </span>
+                              </p>
+                            </div>
+                            <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "8px",
+                                paddingBottom: "12px",
+                                padding: "10px 16px",
+                                borderBottom: "1px solid #e0e0e0",
+                              }}
+                            >
+                              <p
+                                style={{
+                                  margin: 0,
+                                  fontSize: "16px",
+                                  marginBottom: "12px",
+                                }}
+                                className="text-[#888888]"
+                              >
+                                Withdrawal Request
+                              </p>
                               <div
                                 style={{
                                   display: "flex",
                                   flexDirection: "column",
                                   gap: "8px",
-                                  paddingBottom: "12px",
-                                  borderBottom: "1px solid #e0e0e0",
                                 }}
                               >
-                                <p style={{ margin: 0, fontWeight: "bold" }}>
-                                  Withdrawal Request
-                                </p>
                                 <div
                                   style={{
                                     display: "flex",
-                                    flexDirection: "column",
-                                    gap: "8px",
+                                    justifyContent: "space-between",
                                   }}
                                 >
-                                  <div
-                                    style={{
-                                      display: "flex",
-                                      justifyContent: "space-between",
-                                    }}
-                                  >
-                                    <p style={{ margin: 0 }}>3,000</p>
-                                    <p style={{ margin: 0, color: "#2C9455" }}>
-                                      Paid
-                                    </p>
-                                  </div>
-                                  <div
-                                    style={{
-                                      display: "flex",
-                                      justifyContent: "space-between",
-                                    }}
-                                  >
-                                    <p style={{ margin: 0 }}>3,000</p>
-                                    <p style={{ margin: 0, color: "#2C9455" }}>
-                                      Pay
-                                    </p>
-                                  </div>
+                                  <p style={{ margin: 0 }}>₦3,000</p>
+                                  <p style={{
+                                          color: "#FF4D4F",
+                                          padding: "2px",
+                                          paddingLeft: "20px",
+                                          paddingRight: "20px",
+                                        }}
+                                        className="text-[#A66F18] border hover:opacity-70 border-[#A66F18] rounded-3xl bg-[#F9EFDE] ">
+                                    Paid
+                                  </p>
                                 </div>
-                              </div>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  flexDirection: "column",
-                                  gap: "8px",
-                                }}
-                              >
-                                <p style={{ margin: 0, fontWeight: "bold" }}>
-                                  Transaction History
-                                </p>
-                                <div>
-                                  <div
-                                    style={{
-                                      display: "flex",
-                                      justifyContent: "space-between",
-                                      padding: "8px",
-                                      backgroundColor: "#2AC7690D",
-                                    }}
-                                  >
-                                    <p style={{ margin: 0 }}>Date</p>
-                                    <p style={{ margin: 0 }}>Amount</p>
-                                  </div>
-                                  {[...Array(6)].map((_, index) => (
-                                    <div
-                                      key={index}
-                                      style={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        padding: "8px",
-                                        borderBottom: "1px solid #f0f0f0",
-                                      }}
-                                    >
-                                      <p style={{ margin: 0 }}>12/02/233</p>
-                                      <p style={{ margin: 0 }}>3,000</p>
-                                    </div>
-                                  ))}
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                  }}
+                                >
+                                  <p style={{ margin: 0 }}>₦3,000</p>
+                                  <p  style={{
+                                          color: "#1AB168",
+                                          padding: "2px",
+                                          paddingLeft: "20px",
+                                          paddingRight: "20px",
+                                        }}
+                                        className="border border-[#1AB168] bg-[#2AC7690D] rounded-3xl">
+                                    Paid
+                                  </p>
                                 </div>
                               </div>
                             </div>
+                            <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "8px",
+                              }}
+                            >
+                              <p
+                                style={{
+                                marginBottom: "8px",
+                                fontSize: "16px",
+                                  fontWeight: "bold",
+                                  padding: "5px 16px",
+                                color: "#888888",
+                                }}
+                              >
+                                Transaction History
+                              </p>
+                              <div>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                     padding: "5px 16px",
+                                  borderRadius: "8px",
+                                  marginBottom: "8px",
+                                    backgroundColor: "#2AC7690D",
+                                  }}
+                                >
+                                  <p style={{ margin: 0 }}  className="text-[#2D2D2D] text-[22px]">Date</p>
+                                  <p style={{ margin: 0 }}  className="text-[#2D2D2D] text-[22px]">Amount</p>
+                                </div>
+                                {[...Array(6)].map((_, index) => (
+                                  <div
+                                    key={index}
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "space-between",
+                                      padding: "8px 12px",
+                                    }}
+                                  >
+                                    <p style={{ margin: 0 }} className="text-[#888888] text-[20px]">12/02/233</p>
+                                    <p style={{ margin: 0 }}>3,000</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
                         </SheetContent>
                       </Sheet>
                     </div>
@@ -847,15 +996,22 @@ export default function Users() {
                                 display: "flex",
                                 flexDirection: "column",
                                 gap: "4px",
+                                flexWrap: "nowrap",
                               }}
                             >
-                              <p style={{ margin: 0, fontWeight: "bold" }}>
+                              <p
+                                style={{
+                                  margin: 0,
+                                  fontWeight: "bold",
+                                  fontSize: "12px",
+                                }}
+                              >
                                 Back of farnet
                               </p>
                               <p
                                 style={{
                                   margin: 0,
-                                  fontSize: "14px",
+                                  fontSize: "12px",
                                   color: "#666",
                                 }}
                               >
@@ -868,6 +1024,11 @@ export default function Users() {
                                 display: "flex",
                                 alignItems: "center",
                                 color: "#2C9455",
+                                fontSize: "10.5px",
+                                paddingLeft: "10px",
+                                paddingRight: "10px",
+                                borderRadius: "20px",
+                                backgroundColor: "#F0F0F0",
                               }}
                             >
                               Paid for
@@ -883,46 +1044,43 @@ export default function Users() {
                           width: "100%",
                           minWidth: screenSize === "mobileS" ? "600px" : "auto",
                         }}
+                        className="border-none"
                       >
-                        <thead>
-                          <tr style={responsiveStyles.tableHeader}>
+                        <thead style={{ padding: "8px" }}>
+                          <tr
+                            style={{
+                              ...responsiveStyles.tableHeader,
+                              padding: "8px",
+                            }}
+                            className=""
+                          >
                             <th
-                              style={{
-                                ...responsiveStyles.tableCell,
-                                fontWeight: "bold",
-                              }}
+                              style={{ paddingLeft: "15px" }}
+                              className="text-left"
                             >
                               User Name
                             </th>
                             <th
-                              style={{
-                                ...responsiveStyles.tableCell,
-                                fontWeight: "bold",
-                              }}
+                              style={{ paddingLeft: "15px" }}
+                              className="text-left"
                             >
                               User Number
                             </th>
                             <th
-                              style={{
-                                ...responsiveStyles.tableCell,
-                                fontWeight: "bold",
-                              }}
+                              style={{ paddingLeft: "15px" }}
+                              className="text-left"
                             >
                               Location
                             </th>
                             <th
-                              style={{
-                                ...responsiveStyles.tableCell,
-                                fontWeight: "bold",
-                              }}
+                              style={{ paddingLeft: "15px" }}
+                              className="text-left"
                             >
                               Date/Time
                             </th>
                             <th
-                              style={{
-                                ...responsiveStyles.tableCell,
-                                fontWeight: "bold",
-                              }}
+                              style={{ paddingLeft: "15px" }}
+                              className="text-left"
                             >
                               Status
                             </th>
@@ -930,7 +1088,7 @@ export default function Users() {
                         </thead>
                         <tbody>
                           {TableDetails2.map((user, index) => (
-                            <tr key={index}>
+                            <tr key={index} className="text-[#888888]">
                               <td style={responsiveStyles.tableCell}>
                                 {user.name}
                               </td>
@@ -940,11 +1098,27 @@ export default function Users() {
                               <td style={responsiveStyles.tableCell}>
                                 {user.location}
                               </td>
-                              <td style={responsiveStyles.tableCell}>
+                              <td
+                                style={responsiveStyles.tableCell}
+                                className="text-[#2D2D2D]"
+                              >
                                 {user.date} {user.time}
                               </td>
                               <td style={responsiveStyles.tableCell}>
-                                {user.status}
+                                <div
+                                  className={
+                                    user.status === "Completed"
+                                      ? "text-[#1AB168] bg-[#2AC7690D]"
+                                      : ""
+                                  }
+                                  style={{
+                                    textAlign: "center",
+                                    padding: "8px",
+                                    borderRadius: "16px",
+                                  }}
+                                >
+                                  {user.status}
+                                </div>
                               </td>
                             </tr>
                           ))}
