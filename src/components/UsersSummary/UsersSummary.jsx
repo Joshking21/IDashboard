@@ -86,8 +86,8 @@ function UserItem({icon, caption, count, windowWidth}){
                 <SvgIconStroke src={icon} height={windowWidth < 768 ? "20px" : "25px"} width={windowWidth < 768 ? "20px" : "25px"} fill="#fff" />
             </div>
             <div className={styles.textCont}>
-                <p style={{ fontSize: windowWidth < 768 ? '12px' : '14px' }}>{caption}</p>
-                <p style={{ fontSize: windowWidth < 768 ? '16px' : '18px', fontWeight: 'bold' }}>{count}</p>
+                <p style={{ fontSize: windowWidth < 768 ? '16px' : '18px', fontWeight:400, width:"full", flexWrap:"nowrap",fontFamily: "Inter, sans-serif",}}>{caption}</p>
+                <p style={{ fontSize: windowWidth < 768 ? '30px' : '34px', fontWeight: '400' }}>{count}</p>
             </div>
         </div>
     )

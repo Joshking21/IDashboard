@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Dot, ListFilter, Search } from "lucide-react";
+import { ChevronRight, Dot, ListFilter, Search } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import {
   Sheet,
@@ -78,68 +78,72 @@ const TableCell = ({ children, style }) => (
 export default function TableSummary({ windowWidth }) {
   const [changeTable, setChangeTable] = React.useState(true);
   const { userId, setUserId } = useUserID();
-  const [isMobile, setIsMobile] = React.useState(window.innerWidth < 768);
   const [isTablet, setIsTablet] = React.useState(
     window.innerWidth >= 768 && window.innerWidth < 1024
   );
-    const getContainerStyle = () => {
-      if (windowWidth < 375) { // mobileS
-        return {
-          padding: "8px",
-          gap: "12px"
-        };
-      } else if (windowWidth < 425) { // mobileM
-        return {
-          padding: "10px",
-          gap: "12px"
-        };
-      } else if (windowWidth < 768) { // mobileL
-        return {
-          padding: "12px",
-          gap: "14px"
-        };
-      } else if (windowWidth < 1024) { // tablet
-        return {
-          padding: "14px",
-          gap: "16px"
-        };
-      } else { // laptop and larger
-        return {
-          padding: "16px",
-          gap: "16px"
-        };
-      }
-    };
-
-    const getButtonStyle = () => {
-      const baseStyle = {
-        padding: "8px 16px",
-        borderRadius: "24px",
-        fontSize: windowWidth < 768 ? "12px" : "14px",
+  const [isMobile, setIsMobile] = React.useState(window.innerWidth < 768);
+  const getContainerStyle = () => {
+    if (windowWidth < 375) {
+      // mobileS
+      return {
+        padding: "8px",
+        gap: "12px",
       };
-      
-      return baseStyle;
+    } else if (windowWidth < 425) {
+      // mobileM
+      return {
+        padding: "10px",
+        gap: "12px",
+      };
+    } else if (windowWidth < 768) {
+      // mobileL
+      return {
+        padding: "12px",
+        gap: "14px",
+      };
+    } else if (windowWidth < 1024) {
+      // tablet
+      return {
+        padding: "14px",
+        gap: "16px",
+      };
+    } else {
+      // laptop and larger
+      return {
+        padding: "16px",
+        gap: "16px",
+      };
+    }
+  };
+
+  const getButtonStyle = () => {
+    const baseStyle = {
+      padding: "8px 16px",
+      borderRadius: "12px",
+      fontSize: windowWidth < 768 ? "12px" : "14px",
     };
 
-    const getSearchStyle = () => {
-      if (windowWidth < 375) {
-        return {
-          padding: "6px 8px",
-          fontSize: "12px"
-        };
-      } else if (windowWidth < 768) {
-        return {
-          padding: "8px 10px",
-          fontSize: "13px"
-        };
-      } else {
-        return {
-          padding: "8px 12px",
-          fontSize: "14px"
-        };
-      }
-    };
+    return baseStyle;
+  };
 
+  const getSearchStyle = () => {
+    if (windowWidth < 375) {
+      return {
+        padding: "6px 8px",
+        fontSize: "12px",
+      };
+    } else if (windowWidth < 768) {
+      return {
+        padding: "8px 10px",
+        fontSize: "13px",
+      };
+    } else {
+      return {
+        padding: "5px 6px",
+        fontSize: "14px",
+      };
+    }
+  };
 
   const {
     mutate,
@@ -188,56 +192,58 @@ export default function TableSummary({ windowWidth }) {
 
   return (
     <div
-            style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "16px",
-                border: "1px solid #8C8C8C42",
-                borderRadius: "24px",
-                ...getContainerStyle()
-            }}
-        >
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "16px",
+        border: "1px solid #8C8C8C42",
+        borderRadius: "24px",
+        ...getContainerStyle(),
+      }}
+    >
       {/* Toggle buttons */}
-            <div style={{ 
-                display: "flex", 
-                gap: "8px", 
-                flexWrap: windowWidth < 425 ? "wrap" : "nowrap" 
-            }}>
-                <button
-                    style={{
-                        ...getButtonStyle(),
-                        border: changeTable ? "none" : "1px solid #8C8C8C42",
-                        backgroundColor: changeTable ? "#1AB168" : "transparent",
-                        color: changeTable ? "white" : "inherit",
-                    }}
-                    onClick={() => setChangeTable(true)}
-                >
-                    Withdraw Request
-                </button>
-                <button
-                    style={{
-                        ...getButtonStyle(),
-                        border: !changeTable ? "none" : "1px solid #8C8C8C42",
-                        backgroundColor: !changeTable ? "#1AB168" : "transparent",
-                        color: !changeTable ? "white" : "inherit",
-                    }}
-                    onClick={() => setChangeTable(false)}
-                >
-                    Received Payment
-                </button>
-            </div>
+      <div
+        style={{
+          display: "flex",
+          gap: "8px",
+          flexWrap: windowWidth < 425 ? "wrap" : "nowrap",
+        }}
+      >
+        <button
+          style={{
+            ...getButtonStyle(),
+            border: changeTable ? "none" : "1px solid #8C8C8C42",
+            backgroundColor: changeTable ? "#1AB168" : "transparent",
+            color: changeTable ? "white" : "#888888",
+          }}
+          onClick={() => setChangeTable(true)}
+        >
+          Withdraw Request
+        </button>
+        <button
+          style={{
+            ...getButtonStyle(),
+            border: !changeTable ? "none" : "1px solid #8C8C8C42",
+            backgroundColor: !changeTable ? "#1AB168" : "transparent",
+            color: !changeTable ? "white" : "#888888",
+          }}
+          onClick={() => setChangeTable(false)}
+        >
+          Received Payment
+        </button>
+      </div>
 
       {/* Search and filter */}
-       <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    border: "1px solid #8C8C8C42",
-                    borderRadius: "24px",
-                    ...getSearchStyle()
-                }}
-            >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          border: "1px solid #8C8C8C42",
+          borderRadius: "24px",
+          ...getSearchStyle(),
+        }}
+      >
         <div
           style={{
             display: "flex",
@@ -246,7 +252,7 @@ export default function TableSummary({ windowWidth }) {
             width: isMobile ? "70%" : "80%",
           }}
         >
-          <Search size={isMobile ? 16 : 20} />
+          <Search size={isMobile ? 16 : 20} className="text-[#888888]" />
           <input
             placeholder="Search anything...."
             style={{
@@ -284,9 +290,10 @@ export default function TableSummary({ windowWidth }) {
               width: "100%",
               borderCollapse: "collapse",
               minWidth: isMobile ? "600px" : "auto",
+              color: "#2D2D2D",
             }}
           >
-            <thead style={{ backgroundColor: "#2AC7690D" }}>
+            <thead style={{ backgroundColor: "#2AC7690D", color: "#888888" }}>
               <tr>
                 <TableHeader>User Name</TableHeader>
                 <TableHeader>Bank Name</TableHeader>
@@ -334,9 +341,10 @@ export default function TableSummary({ windowWidth }) {
               width: "100%",
               borderCollapse: "collapse",
               minWidth: isMobile ? "700px" : "auto",
+              color: "#2D2D2D",
             }}
           >
-            <thead style={{ backgroundColor: "#2AC7690D" }}>
+            <thead style={{ backgroundColor: "#2AC7690D", color: "#888888" }}>
               <tr>
                 <TableHeader style={{ width: isMobile ? "120px" : "150px" }}>
                   User Details
@@ -366,7 +374,7 @@ export default function TableSummary({ windowWidth }) {
                   <TableCell>
                     <div style={{ display: "flex", alignItems: "center" }}>
                       {new Date(user?.createdAt).toLocaleDateString("en-GB")}{" "}
-                      <Dot />{" "}
+                      <Dot className="text-[#1AB168]" />{" "}
                       {new Date(user?.createdAt).toLocaleTimeString("en-US", {
                         hour: "numeric",
                         minute: "2-digit",
@@ -377,18 +385,31 @@ export default function TableSummary({ windowWidth }) {
                   <TableCell>
                     <Sheet>
                       <SheetTrigger asChild>
-                        <Button variant="ghost" style={{padding:"5px"}} size="sm">
-                          View
+                        <Button
+                          variant="ghost"
+                          style={{ padding: "5px" }}
+                          size="sm"
+                        >
+                          <ChevronRight />
                         </Button>
                       </SheetTrigger>
                       <SheetContent
                         style={{
                           width: isMobile ? "100%" : "400px",
-                          padding: "16px",
+                          padding: "16px 0px",
                           overflowY: "auto",
                         }}
                       >
-                        <SheetHeader style={{ marginBottom: "16px" }}>
+                        <SheetHeader
+                          style={{
+                            marginBottom: "5px",
+                            color: "#2D2D2D",
+                            fontSize: "20px",
+                            fontWeight: "700",
+                            padding: "0px 16px",
+                          }}
+                          className="border-b"
+                        >
                           <SheetTitle>Transaction Details</SheetTitle>
                         </SheetHeader>
                         <SheetDescription
@@ -398,61 +419,77 @@ export default function TableSummary({ windowWidth }) {
                             gap: "16px",
                           }}
                         >
-                          <div
-                            style={{
-                              background:
-                                "linear-gradient(to right, #2AC769, #2C9455)",
-                              color: "white",
-                              borderRadius: "16px",
-                              padding: "16px",
-                              display: "flex",
-                              justifyContent: "space-between",
-                            }}
-                          >
+                          <div style={{ padding: "0px 16px" }}>
                             <div
                               style={{
+                                background:
+                                  "linear-gradient(to right, #2AC769, #2C9455)",
+                                color: "white",
+                                borderRadius: "16px",
+
                                 display: "flex",
-                                flexDirection: "column",
-                                gap: "8px",
+                                justifyContent: "space-between",
+                                padding: "16px",
                               }}
                             >
-                              <span>Total earned</span>
-                              <span
+                              <div
                                 style={{
-                                  fontSize: "1.2rem",
-                                  fontWeight: "bold",
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  gap: "8px",
                                 }}
                               >
-                                ₦
-                                {summaryTransactionsDetails?.totalEarned?.toLocaleString() ||
-                                  "0"}
-                              </span>
-                            </div>
-                            <div
-                              style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: "8px",
-                              }}
-                            >
-                              <span>Withdrawable</span>
-                              <span
+                                <span
+                                  style={{
+                                    fontWeight: "400",
+                                    fontSize: "18px",
+                                  }}
+                                >
+                                  Total earned
+                                </span>
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    fontSize: "22px",
+                                  }}
+                                >
+                                  ₦
+                                  {summaryTransactionsDetails?.totalEarned?.toLocaleString() ||
+                                    "0"}
+                                </span>
+                              </div>
+                              <div
                                 style={{
-                                  fontSize: "1.2rem",
-                                  fontWeight: "bold",
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  gap: "8px",
+                                  fontSize: "22px",
                                 }}
                               >
-                                ₦
-                                {summaryTransactionsDetails?.withdrawable?.toLocaleString() ||
-                                  "0"}
-                              </span>
+                                <span
+                                  style={{
+                                    fontWeight: "400",
+                                    fontSize: "18px",
+                                  }}
+                                >
+                                  Withdrawable
+                                </span>
+                                <span
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  ₦
+                                  {summaryTransactionsDetails?.withdrawable?.toLocaleString() ||
+                                    "0"}
+                                </span>
+                              </div>
                             </div>
                           </div>
-
                           <div
                             style={{
                               backgroundColor: "#2AC7690D",
-                              borderRadius: "16px",
                               padding: "16px",
                               display: "flex",
                               flexDirection: "column",
@@ -480,12 +517,17 @@ export default function TableSummary({ windowWidth }) {
                           <div
                             style={{
                               borderBottom: "1px solid #e0e0e0",
-                              paddingBottom: "16px",
+                              paddingBottom: "18px",
+                              padding: "10px 16px",
                             }}
+                            className="border-b"
                           >
                             <p
-                              style={{ fontWeight: "500", marginBottom: "8px" }}
-                              className="text-black"
+                              style={{
+                                fontWeight: "500",
+                                marginBottom: "12px",
+                              }}
+                              className="text-[#888888]"
                             >
                               Withdrawal Request
                             </p>
@@ -505,15 +547,17 @@ export default function TableSummary({ windowWidth }) {
                                       justifyContent: "space-between",
                                     }}
                                   >
-                                    <p className="flex items-center justify-center">
-                                      ₦{item?.amount ?? "N/A"}
+                                    <p className="flex items-center justify-center text-[20px] text-[#2D2D2D]">
+                                      ₦ {" "}{item?.amount ?? "N/A"}
                                     </p>
                                     {item?.isProcessed ? (
                                       <p
-                                        style={{ color: "#1AB168",
+                                        style={{
+                                          color: "#1AB168",
                                           padding: "2px",
                                           paddingLeft: "20px",
-                                          paddingRight: "20px", }}
+                                          paddingRight: "20px",
+                                        }}
                                         className="border border-[#1AB168] bg-[#2AC7690D] rounded-3xl"
                                       >
                                         Paid
@@ -545,7 +589,13 @@ export default function TableSummary({ windowWidth }) {
 
                           <div>
                             <p
-                              style={{ fontWeight: "500", marginBottom: "8px" }}
+                              style={{
+                                fontWeight: "500",
+                                marginBottom: "8px",
+                                color: "#888888",
+                                fontSize: "16px",
+                                padding: "5px 16px",
+                              }}
                             >
                               Transaction History
                             </p>
@@ -555,32 +605,40 @@ export default function TableSummary({ windowWidth }) {
                                   display: "flex",
                                   justifyContent: "space-between",
                                   backgroundColor: "#2AC7690D",
-                                  padding: "8px 12px",
+                                  padding: "5px 16px",
                                   borderRadius: "8px",
                                   marginBottom: "8px",
                                 }}
                               >
-                                <span className="text-black">Date</span>
-                                <span className="text-black">Amount</span>
+                                <span className="text-[#2D2D2D] text-[22px]">
+                                  Date
+                                </span>
+                                <span className="text-[#2D2D2D] text-[22px]">
+                                  Amount
+                                </span>
                               </div>
-                              {summaryTransactionsDetails?.transactionHistory?.map(
-                                (item, index) => (
-                                  <div
-                                    key={index}
-                                    style={{
-                                      display: "flex",
-                                      justifyContent: "space-between",
-                                      padding: "8px 12px",
-                                      borderBottom: "1px solid #f0f0f0",
-                                    }}
-                                  >
-                                    <span>{item.date || "12/02/2023"}</span>
-                                    <span>
-                                      ₦{item.amount?.toLocaleString() || "0"}
-                                    </span>
-                                  </div>
-                                )
-                              )}
+                              <div style={{ padding: "0px 16px" }}>
+                                {" "}
+                                {summaryTransactionsDetails?.transactionHistory?.map(
+                                  (item, index) => (
+                                    <div
+                                      key={index}
+                                      style={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        padding: "8px 12px",
+                                      }}
+                                    >
+                                      <span className="text-[#888888] text-[20px]">
+                                        {item.date || "12/02/2023"}
+                                      </span>
+                                      <span>
+                                        ₦{item.amount?.toLocaleString() || "0"}
+                                      </span>
+                                    </div>
+                                  )
+                                )}
+                              </div>
                             </div>
                           </div>
                         </SheetDescription>
