@@ -1,6 +1,7 @@
 import { InputAdornment, TextField } from "@mui/material";
 import styles from "./Users.module.css";
 import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import useGetUserSummary from "@/hooks/useGetUserSummary";
 import UserTable from "@/components/UserTable/UserTable";
 import { Button } from "@/components/ui/button";
