@@ -162,7 +162,7 @@ export default function TableSummary({ windowWidth }) {
 
   const { data: summaryTransactionsDetails } =
     useGetTransactionDetailSummary(userId);
-  // console.log(summaryTransactions);
+  console.log(summaryTransactions);
   console.log(summaryTransactionsDetails);
 
   // Handle window resize for responsiveness
@@ -175,6 +175,7 @@ export default function TableSummary({ windowWidth }) {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+  const [search, setSearch] = useState();
 
   if (isError) {
     return (
@@ -262,6 +263,8 @@ export default function TableSummary({ windowWidth }) {
               fontSize: isMobile ? "0.8rem" : "0.9rem",
               background: "transparent",
             }}
+            onChange={(e) => setSearch(e.target.value)}
+            value={search}
           />
         </div>
         <Button
@@ -358,31 +361,53 @@ export default function TableSummary({ windowWidth }) {
               </tr>
             </thead>
             <tbody>
-              {summaryTransactions?.receivedPayments?.map((user, index) => (
-                <tr
-                  key={index}
-                  onClick={() => setUserId(user?.agent?.user?.id)}
-                >
-                  <TableCell style={{ width: isMobile ? "120px" : "150px" }}>
-                    <UserDetail user={user.user} title="User" />
-                  </TableCell>
-                  <TableCell style={{ width: isMobile ? "120px" : "150px" }}>
-                    <UserDetail user={user?.agent?.user} title="Agent" />
-                  </TableCell>
-                  <TableCell>₦{user.amount?.toLocaleString() || "0"}</TableCell>
+              {summaryTransactions?.receivedPayments
+                ?.filter((user) => {
+                  if (!search) return true; // show all if no search
 
-                  <TableCell>
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      {new Date(user?.createdAt).toLocaleDateString("en-GB")}{" "}
-                      <Dot className="text-[#1AB168]" />{" "}
-                      {new Date(user?.createdAt).toLocaleTimeString("en-US", {
-                        hour: "numeric",
-                        minute: "2-digit",
-                        hour12: true,
-                      })}
-                    </div>
-                  </TableCell>
-                  <TableCell>
+                  const email = user?.user?.email?.toLowerCase() || "";
+                  const amount = user?.amount?.toString() || "";
+                  const date = new Date(user?.createdAt)
+                    .toLocaleDateString("en-GB")
+                    .toLowerCase();
+                  return (
+                    user?.user?.first_name
+                      ?.toLowerCase()
+                      .includes(search.toLowerCase()) ||
+                    user?.agent?.user?.first_name
+                      ?.toLowerCase()
+                      .includes(search.toLowerCase()) ||
+                    amount.includes(search.toLowerCase()) ||
+                    date.includes(search.toLowerCase())
+                  );
+                })
+                .map((user, index) => (
+                  <tr
+                    key={index}
+                    onClick={() => setUserId(user?.agent?.user?.id)}
+                  >
+                    <TableCell style={{ width: isMobile ? "120px" : "150px" }}>
+                      <UserDetail user={user?.user} title="User" />
+                    </TableCell>
+                    <TableCell style={{ width: isMobile ? "120px" : "150px" }}>
+                      <UserDetail user={user?.agent?.user} title="Agent" />
+                    </TableCell>
+                    <TableCell>
+                      ₦{user.amount?.toLocaleString() || "0"}
+                    </TableCell>
+
+                    <TableCell>
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        {new Date(user?.createdAt).toLocaleDateString("en-GB")}{" "}
+                        <Dot className="text-[#1AB168]" />{" "}
+                        {new Date(user?.createdAt).toLocaleTimeString("en-US", {
+                          hour: "numeric",
+                          minute: "2-digit",
+                          hour12: true,
+                        })}
+                      </div>
+                    </TableCell>
+
                     <Sheet>
                       <SheetTrigger asChild>
                         <Button
@@ -548,7 +573,7 @@ export default function TableSummary({ windowWidth }) {
                                     }}
                                   >
                                     <p className="flex items-center justify-center text-[20px] text-[#2D2D2D]">
-                                      ₦ {" "}{item?.amount ?? "N/A"}
+                                      ₦ {item?.amount ?? "N/A"}
                                     </p>
                                     {item?.isProcessed ? (
                                       <p
@@ -644,9 +669,8 @@ export default function TableSummary({ windowWidth }) {
                         </SheetDescription>
                       </SheetContent>
                     </Sheet>
-                  </TableCell>
-                </tr>
-              ))}
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
