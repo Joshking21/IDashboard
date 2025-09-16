@@ -1,7 +1,6 @@
 import { InputAdornment, TextField } from "@mui/material";
 import styles from "./Users.module.css";
 import { useState, useEffect } from "react";
-import { useState, useEffect } from "react";
 import useGetUserSummary from "@/hooks/useGetUserSummary";
 import UserTable from "@/components/UserTable/UserTable";
 import { Button } from "@/components/ui/button";
@@ -318,6 +317,7 @@ export default function Users() {
       desc: usersDetails?.agent?.account?.accountNumber || "N/A",
     },
   ];
+  const [search, setSearch] = useState();
 
   return (
     <>
@@ -363,6 +363,8 @@ export default function Users() {
                 />
                 <input
                   placeholder="Search"
+                  onChange={(e) => setSearch(e.target.value)}
+                  value={search}
                   style={{
                     width: "100%",
                     border: "none",
@@ -379,6 +381,7 @@ export default function Users() {
                 userData={usersSummary?.totalUsers}
                 state={setStater}
                 windowWidth={windowWidth}
+                search={search}
               />
             </div>
           </section>
@@ -884,13 +887,15 @@ export default function Users() {
                                   }}
                                 >
                                   <p style={{ margin: 0 }}>₦3,000</p>
-                                  <p style={{
-                                          color: "#FF4D4F",
-                                          padding: "2px",
-                                          paddingLeft: "20px",
-                                          paddingRight: "20px",
-                                        }}
-                                        className="text-[#A66F18] border hover:opacity-70 border-[#A66F18] rounded-3xl bg-[#F9EFDE] ">
+                                  <p
+                                    style={{
+                                      color: "#FF4D4F",
+                                      padding: "2px",
+                                      paddingLeft: "20px",
+                                      paddingRight: "20px",
+                                    }}
+                                    className="text-[#A66F18] border hover:opacity-70 border-[#A66F18] rounded-3xl bg-[#F9EFDE] "
+                                  >
                                     Paid
                                   </p>
                                 </div>
@@ -901,13 +906,15 @@ export default function Users() {
                                   }}
                                 >
                                   <p style={{ margin: 0 }}>₦3,000</p>
-                                  <p  style={{
-                                          color: "#1AB168",
-                                          padding: "2px",
-                                          paddingLeft: "20px",
-                                          paddingRight: "20px",
-                                        }}
-                                        className="border border-[#1AB168] bg-[#2AC7690D] rounded-3xl">
+                                  <p
+                                    style={{
+                                      color: "#1AB168",
+                                      padding: "2px",
+                                      paddingLeft: "20px",
+                                      paddingRight: "20px",
+                                    }}
+                                    className="border border-[#1AB168] bg-[#2AC7690D] rounded-3xl"
+                                  >
                                     Paid
                                   </p>
                                 </div>
@@ -922,11 +929,11 @@ export default function Users() {
                             >
                               <p
                                 style={{
-                                marginBottom: "8px",
-                                fontSize: "16px",
+                                  marginBottom: "8px",
+                                  fontSize: "16px",
                                   fontWeight: "bold",
                                   padding: "5px 16px",
-                                color: "#888888",
+                                  color: "#888888",
                                 }}
                               >
                                 Transaction History
@@ -936,14 +943,24 @@ export default function Users() {
                                   style={{
                                     display: "flex",
                                     justifyContent: "space-between",
-                                     padding: "5px 16px",
-                                  borderRadius: "8px",
-                                  marginBottom: "8px",
+                                    padding: "5px 16px",
+                                    borderRadius: "8px",
+                                    marginBottom: "8px",
                                     backgroundColor: "#2AC7690D",
                                   }}
                                 >
-                                  <p style={{ margin: 0 }}  className="text-[#2D2D2D] text-[22px]">Date</p>
-                                  <p style={{ margin: 0 }}  className="text-[#2D2D2D] text-[22px]">Amount</p>
+                                  <p
+                                    style={{ margin: 0 }}
+                                    className="text-[#2D2D2D] text-[22px]"
+                                  >
+                                    Date
+                                  </p>
+                                  <p
+                                    style={{ margin: 0 }}
+                                    className="text-[#2D2D2D] text-[22px]"
+                                  >
+                                    Amount
+                                  </p>
                                 </div>
                                 {[...Array(6)].map((_, index) => (
                                   <div
@@ -954,7 +971,12 @@ export default function Users() {
                                       padding: "8px 12px",
                                     }}
                                   >
-                                    <p style={{ margin: 0 }} className="text-[#888888] text-[20px]">12/02/233</p>
+                                    <p
+                                      style={{ margin: 0 }}
+                                      className="text-[#888888] text-[20px]"
+                                    >
+                                      12/02/233
+                                    </p>
                                     <p style={{ margin: 0 }}>3,000</p>
                                   </div>
                                 ))}
